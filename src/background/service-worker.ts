@@ -1,6 +1,9 @@
 import { getStorage, setStorage } from "../shared/storage";
 
-const bypassSet = new Set<string>();
+const BYPASS_DURATION_MS = 20 * 1000;
+
+// Maps domain -> expiry timestamp
+const bypassMap = new Map<string, number>();
 
 function domainMatches(hostname: string, pattern: string): boolean {
   return hostname === pattern || hostname.endsWith(`.${pattern}`);
@@ -8,6 +11,23 @@ function domainMatches(hostname: string, pattern: string): boolean {
 
 function matchesList(hostname: string, domains: string[]): boolean {
   return domains.some((d) => domainMatches(hostname, d));
+}
+
+function isDomainBypassed(hostname: string): boolean {
+  for (const [domain, expiry] of bypassMap) {
+    if (domainMatches(hostname, domain)) {
+      if (Date.now() < expiry) return true;
+      bypassMap.delete(domain);
+    }
+  }
+  return false;
+}
+
+function extractMatchingDomain(hostname: string, domains: string[]): string | null {
+  for (const d of domains) {
+    if (domainMatches(hostname, d)) return d;
+  }
+  return null;
 }
 
 chrome.webNavigation.onBeforeNavigate.addListener(async (details) => {
@@ -21,11 +41,6 @@ chrome.webNavigation.onBeforeNavigate.addListener(async (details) => {
   }
 
   if (!url.protocol.startsWith("http")) return;
-
-  if (bypassSet.has(details.url)) {
-    bypassSet.delete(details.url);
-    return;
-  }
 
   const data = await getStorage();
 
@@ -46,6 +61,8 @@ chrome.webNavigation.onBeforeNavigate.addListener(async (details) => {
   }
 
   if (matchesList(url.hostname, data.distractionSites)) {
+    if (isDomainBypassed(url.hostname)) return;
+
     chrome.tabs.update(details.tabId, {
       url: chrome.runtime.getURL(
         `blocked.html?reason=distraction&url=${encodeURIComponent(details.url)}`
@@ -56,7 +73,12 @@ chrome.webNavigation.onBeforeNavigate.addListener(async (details) => {
 
 chrome.runtime.onMessage.addListener((msg, sender) => {
   if (msg.type === "bypass" && msg.url && sender.tab?.id) {
-    bypassSet.add(msg.url);
+    try {
+      const url = new URL(msg.url);
+      bypassMap.set(url.hostname, Date.now() + BYPASS_DURATION_MS);
+    } catch {
+      // ignore malformed URLs
+    }
     chrome.tabs.update(sender.tab.id, { url: msg.url });
   }
 });
