@@ -6,10 +6,11 @@
   <link rel="stylesheet" href="styles.css">
   <title>Scroll Stopper</title>
 </head>
-<body class="w-72 bg-gray-50 text-gray-800">
-  <div class="p-5">
+<body class="w-80 bg-gray-50 text-gray-800">
+  <div class="p-5 max-h-[500px] overflow-y-auto">
     <h1 class="text-lg font-semibold text-center mb-4">Scroll Stopper</h1>
 
+    <!-- Deep focus toggle -->
     <div class="flex items-center justify-between py-3 border-b border-gray-200">
       <span class="text-sm font-medium">Deep focus mode</span>
       <label class="relative inline-flex items-center cursor-pointer">
@@ -18,14 +19,36 @@
       </label>
     </div>
 
-    <div class="flex items-center justify-between py-3 border-b border-gray-200">
-      <span class="text-sm font-medium">Distraction sites</span>
-      <button id="edit-distraction" class="text-xs text-blue-500 hover:text-blue-700 font-medium">Edit</button>
+    <!-- Distraction sites -->
+    <div class="py-3 border-b border-gray-200">
+      <div class="flex items-center justify-between mb-2">
+        <span class="text-sm font-medium">Distraction sites</span>
+      </div>
+      <ul id="distraction-list" class="space-y-1.5 mb-2"></ul>
+      <p id="distraction-empty" class="text-xs text-gray-400 mb-2 hidden">No sites added.</p>
+      <div id="distraction-add-row" class="flex gap-2 hidden">
+        <input id="distraction-input" type="text" placeholder="e.g. reddit.com"
+          class="flex-1 border border-gray-300 rounded px-2 py-1 text-xs focus:outline-none focus:ring-1 focus:ring-blue-500">
+        <button id="distraction-confirm" class="text-xs text-blue-500 hover:text-blue-700 font-medium">Add</button>
+        <button id="distraction-cancel" class="text-xs text-gray-400 hover:text-gray-600">Cancel</button>
+      </div>
+      <button id="distraction-add-btn" class="text-xs text-blue-500 hover:text-blue-700 font-medium">+ Add</button>
     </div>
 
-    <div class="flex items-center justify-between py-3">
-      <span class="text-sm font-medium">Allowed during deep focus</span>
-      <button id="edit-allowed" class="text-xs text-blue-500 hover:text-blue-700 font-medium">Edit</button>
+    <!-- Allowed during deep focus -->
+    <div class="py-3">
+      <div class="flex items-center justify-between mb-2">
+        <span class="text-sm font-medium">Allowed during deep focus</span>
+      </div>
+      <ul id="allowed-list" class="space-y-1.5 mb-2"></ul>
+      <p id="allowed-empty" class="text-xs text-gray-400 mb-2 hidden">No sites added.</p>
+      <div id="allowed-add-row" class="flex gap-2 hidden">
+        <input id="allowed-input" type="text" placeholder="e.g. docs.google.com"
+          class="flex-1 border border-gray-300 rounded px-2 py-1 text-xs focus:outline-none focus:ring-1 focus:ring-blue-500">
+        <button id="allowed-confirm" class="text-xs text-blue-500 hover:text-blue-700 font-medium">Add</button>
+        <button id="allowed-cancel" class="text-xs text-gray-400 hover:text-gray-600">Cancel</button>
+      </div>
+      <button id="allowed-add-btn" class="text-xs text-blue-500 hover:text-blue-700 font-medium">+ Add</button>
     </div>
   </div>
 
