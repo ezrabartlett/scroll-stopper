@@ -1,4 +1,4 @@
-import { getStorage } from "../shared/storage";
+import { getStorage, setStorage } from "../shared/storage";
 
 const bypassSet = new Set<string>();
 
@@ -28,6 +28,11 @@ chrome.webNavigation.onBeforeNavigate.addListener(async (details) => {
   }
 
   const data = await getStorage();
+
+  if (data.deepFocusEnabled && data.deepFocusEndTime && Date.now() >= data.deepFocusEndTime) {
+    await setStorage({ deepFocusEnabled: false, deepFocusEndTime: null });
+    data.deepFocusEnabled = false;
+  }
 
   if (data.deepFocusEnabled) {
     if (!matchesList(url.hostname, data.allowedDuringFocus)) {

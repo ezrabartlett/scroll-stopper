@@ -98,15 +98,134 @@ function setupList(prefix: string, storageKey: ListKey) {
 }
 
 const focusToggle = document.getElementById("focus-toggle") as HTMLInputElement;
+const focusModal = document.getElementById("focus-modal") as HTMLDivElement;
+const focusMinutesInput = document.getElementById("focus-minutes") as HTMLInputElement;
+const focusStart = document.getElementById("focus-start") as HTMLButtonElement;
+const focusCancel = document.getElementById("focus-cancel") as HTMLButtonElement;
+const focusBanner = document.getElementById("focus-banner") as HTMLDivElement;
+const focusCountdown = document.getElementById("focus-countdown") as HTMLSpanElement;
+
+let countdownInterval: ReturnType<typeof setInterval> | null = null;
+
+function formatCountdown(ms: number): string {
+  const totalSec = Math.max(0, Math.ceil(ms / 1000));
+  const h = Math.floor(totalSec / 3600);
+  const m = Math.floor((totalSec % 3600) / 60);
+  const s = totalSec % 60;
+  const pad = (n: number) => String(n).padStart(2, "0");
+  return h > 0 ? `${h}:${pad(m)}:${pad(s)}` : `${m}:${pad(s)}`;
+}
+
+function startCountdown(endTime: number) {
+  stopCountdown();
+  function tick() {
+    const remaining = endTime - Date.now();
+    if (remaining <= 0) {
+      stopCountdown();
+      focusBanner.classList.add("hidden");
+      focusToggle.checked = false;
+      setStorage({ deepFocusEnabled: false, deepFocusEndTime: null });
+      return;
+    }
+    focusCountdown.textContent = formatCountdown(remaining);
+  }
+  focusBanner.classList.remove("hidden");
+  tick();
+  countdownInterval = setInterval(tick, 1000);
+}
+
+function stopCountdown() {
+  if (countdownInterval) {
+    clearInterval(countdownInterval);
+    countdownInterval = null;
+  }
+  focusBanner.classList.add("hidden");
+}
+
+const endModal = document.getElementById("end-modal") as HTMLDivElement;
+const endCancel = document.getElementById("end-cancel") as HTMLButtonElement;
+const endConfirm = document.getElementById("end-confirm") as HTMLButtonElement;
+
+focusToggle.addEventListener("change", () => {
+  if (focusToggle.checked) {
+    focusMinutesInput.value = "15";
+    focusModal.classList.remove("hidden");
+    focusMinutesInput.focus();
+  } else {
+    focusToggle.checked = true;
+    endModal.classList.remove("hidden");
+  }
+});
+
+endConfirm.addEventListener("click", () => {
+  endModal.classList.add("hidden");
+  focusToggle.checked = false;
+  stopCountdown();
+  setStorage({ deepFocusEnabled: false, deepFocusEndTime: null });
+});
+
+endCancel.addEventListener("click", () => {
+  endModal.classList.add("hidden");
+});
+
+focusStart.addEventListener("click", async () => {
+  const minutes = parseInt(focusMinutesInput.value, 10);
+  if (!minutes || minutes < 1) return;
+  const endTime = Date.now() + minutes * 60 * 1000;
+  await setStorage({ deepFocusEnabled: true, deepFocusEndTime: endTime });
+  focusModal.classList.add("hidden");
+  startCountdown(endTime);
+});
+
+focusMinutesInput.addEventListener("keydown", (e) => {
+  if (e.key === "Enter") focusStart.click();
+  if (e.key === "Escape") focusCancel.click();
+});
+
+focusCancel.addEventListener("click", () => {
+  focusToggle.checked = false;
+  focusModal.classList.add("hidden");
+  setStorage({ deepFocusEnabled: false, deepFocusEndTime: null });
+});
 
 async function init() {
   const data = await getStorage();
   focusToggle.checked = data.deepFocusEnabled;
+  if (data.deepFocusEnabled && data.deepFocusEndTime) {
+    if (Date.now() >= data.deepFocusEndTime) {
+      await setStorage({ deepFocusEnabled: false, deepFocusEndTime: null });
+      focusToggle.checked = false;
+    } else {
+      startCountdown(data.deepFocusEndTime);
+    }
+  }
 }
 
-focusToggle.addEventListener("change", async () => {
-  await setStorage({ deepFocusEnabled: focusToggle.checked });
-});
+const mainView = document.getElementById("main-view") as HTMLDivElement;
+const settingsView = document.getElementById("settings-view") as HTMLDivElement;
+const distractionView = document.getElementById("distraction-view") as HTMLDivElement;
+const allowedView = document.getElementById("allowed-view") as HTMLDivElement;
+
+const settingsBtn = document.getElementById("settings-btn") as HTMLButtonElement;
+const backBtn = document.getElementById("back-btn") as HTMLButtonElement;
+const navDistraction = document.getElementById("nav-distraction") as HTMLButtonElement;
+const navAllowed = document.getElementById("nav-allowed") as HTMLButtonElement;
+const distractionBackBtn = document.getElementById("distraction-back-btn") as HTMLButtonElement;
+const allowedBackBtn = document.getElementById("allowed-back-btn") as HTMLButtonElement;
+
+const allViews = [mainView, settingsView, distractionView, allowedView];
+
+function showView(view: HTMLDivElement) {
+  allViews.forEach((v) => v.classList.add("hidden"));
+  view.classList.remove("hidden");
+}
+
+settingsBtn.addEventListener("click", () => showView(settingsView));
+backBtn.addEventListener("click", () => showView(mainView));
+navDistraction.addEventListener("click", () => showView(distractionView));
+navAllowed.addEventListener("click", () => showView(allowedView));
+distractionBackBtn.addEventListener("click", () => showView(mainView));
+allowedBackBtn.addEventListener("click", () => showView(mainView));
 
 setupList("distraction", "distractionSites");
 setupList("allowed", "allowedDuringFocus");

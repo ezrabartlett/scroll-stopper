@@ -1,11 +1,13 @@
 export interface StorageData {
   deepFocusEnabled: boolean;
+  deepFocusEndTime: number | null;
   distractionSites: string[];
   allowedDuringFocus: string[];
 }
 
 const DEFAULTS: StorageData = {
   deepFocusEnabled: false,
+  deepFocusEndTime: null,
   distractionSites: [],
   allowedDuringFocus: [],
 };
