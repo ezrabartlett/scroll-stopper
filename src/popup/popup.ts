@@ -237,8 +237,14 @@ function showView(view: HTMLDivElement) {
   view.classList.remove("hidden");
 }
 
-settingsBtn.addEventListener("click", () => showView(settingsView));
-backBtn.addEventListener("click", () => showView(mainView));
+settingsBtn.addEventListener("click", () => {
+  loadSettingsFromStorage();
+  showView(settingsView);
+});
+backBtn.addEventListener("click", () => {
+  loadSettingsFromStorage();
+  showView(mainView);
+});
 navDistraction.addEventListener("click", () => showView(distractionView));
 navAllowed.addEventListener("click", () => showView(allowedView));
 distractionBackBtn.addEventListener("click", () => showView(mainView));
@@ -278,12 +284,25 @@ async function renderBypasses() {
     label.className = "text-xs font-medium text-green-700";
     label.textContent = `${domain} unlocked`;
 
+    const right = document.createElement("div");
+    right.className = "flex items-center gap-2";
+
     const timer = document.createElement("span");
     timer.className = "text-xs font-mono text-green-700";
     timer.textContent = formatBypassTime(expiry - now);
 
+    const lockBtn = document.createElement("button");
+    lockBtn.className = "text-xs font-medium text-green-700 bg-green-100 hover:bg-green-200 px-2 py-0.5 rounded transition-colors";
+    lockBtn.textContent = "Relock";
+    lockBtn.addEventListener("click", async () => {
+      await chrome.runtime.sendMessage({ type: "relockDomain", domain });
+      renderBypasses();
+    });
+
+    right.appendChild(timer);
+    right.appendChild(lockBtn);
     banner.appendChild(label);
-    banner.appendChild(timer);
+    banner.appendChild(right);
     bypassBanners.appendChild(banner);
   }
 
@@ -293,31 +312,43 @@ async function renderBypasses() {
 }
 
 const waitTimeInput = document.getElementById("wait-time-input") as HTMLInputElement;
-
-waitTimeInput.addEventListener("change", async () => {
-  const val = parseInt(waitTimeInput.value, 10);
-  if (!isNaN(val) && val >= 0) {
-    await setStorage({ waitTimeSeconds: val });
-  }
-});
-
 const bypassTimeInput = document.getElementById("bypass-time-input") as HTMLInputElement;
+const applySettingsBtn = document.getElementById("apply-settings-btn") as HTMLButtonElement;
 
-bypassTimeInput.addEventListener("change", async () => {
-  const val = parseInt(bypassTimeInput.value, 10);
-  if (!isNaN(val) && val >= 0) {
-    await setStorage({ bypassTimeMinutes: val });
+let savedWaitTime = 10;
+let savedBypassTime = 10;
+
+function checkSettingsDirty() {
+  const waitDirty = parseInt(waitTimeInput.value, 10) !== savedWaitTime;
+  const bypassDirty = parseInt(bypassTimeInput.value, 10) !== savedBypassTime;
+  applySettingsBtn.disabled = !(waitDirty || bypassDirty);
+}
+
+waitTimeInput.addEventListener("input", checkSettingsDirty);
+bypassTimeInput.addEventListener("input", checkSettingsDirty);
+
+applySettingsBtn.addEventListener("click", async () => {
+  const waitVal = parseInt(waitTimeInput.value, 10);
+  const bypassVal = parseInt(bypassTimeInput.value, 10);
+  if (!isNaN(waitVal) && waitVal >= 0 && !isNaN(bypassVal) && bypassVal >= 0) {
+    await setStorage({ waitTimeSeconds: waitVal, bypassTimeMinutes: bypassVal });
+    savedWaitTime = waitVal;
+    savedBypassTime = bypassVal;
+    applySettingsBtn.disabled = true;
   }
 });
 
-async function initSettings() {
+async function loadSettingsFromStorage() {
   const data = await getStorage();
-  waitTimeInput.value = String(data.waitTimeSeconds);
-  bypassTimeInput.value = String(data.bypassTimeMinutes);
+  savedWaitTime = data.waitTimeSeconds;
+  savedBypassTime = data.bypassTimeMinutes;
+  waitTimeInput.value = String(savedWaitTime);
+  bypassTimeInput.value = String(savedBypassTime);
+  applySettingsBtn.disabled = true;
 }
 
 setupList("distraction", "distractionSites");
 setupList("allowed", "allowedDuringFocus");
 init();
-initSettings();
+loadSettingsFromStorage();
 renderBypasses();

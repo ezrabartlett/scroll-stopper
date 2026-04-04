@@ -15,7 +15,16 @@ if (reason === "deep_focus") {
   deepFocusView.classList.remove("hidden");
 } else {
   distractionView.classList.remove("hidden");
-  blockedUrl.textContent = originalUrl;
+  if (originalUrl.length > 100) {
+    try {
+      const parsed = new URL(originalUrl);
+      blockedUrl.textContent = parsed.hostname;
+    } catch {
+      blockedUrl.textContent = originalUrl.slice(0, 100) + "…";
+    }
+  } else {
+    blockedUrl.textContent = originalUrl;
+  }
 
   getStorage().then((data) => {
     const waitSeconds = data.waitTimeSeconds;

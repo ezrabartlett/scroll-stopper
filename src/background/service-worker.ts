@@ -103,4 +103,8 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
   if (msg.type === "clearBypasses") {
     bypassMap.clear();
   }
+
+  if (msg.type === "relockDomain" && msg.domain) {
+    bypassMap.delete(msg.domain);
+  }
 });
