@@ -173,8 +173,10 @@ focusStart.addEventListener("click", async () => {
   if (!minutes || minutes < 1) return;
   const endTime = Date.now() + minutes * 60 * 1000;
   await setStorage({ deepFocusEnabled: true, deepFocusEndTime: endTime });
+  await chrome.runtime.sendMessage({ type: "clearBypasses" });
   focusModal.classList.add("hidden");
   startCountdown(endTime);
+  renderBypasses();
 });
 
 focusMinutesInput.addEventListener("keydown", (e) => {
@@ -227,6 +229,55 @@ navAllowed.addEventListener("click", () => showView(allowedView));
 distractionBackBtn.addEventListener("click", () => showView(mainView));
 allowedBackBtn.addEventListener("click", () => showView(mainView));
 
+const bypassBanners = document.getElementById("bypass-banners") as HTMLDivElement;
+let bypassInterval: ReturnType<typeof setInterval> | null = null;
+
+function formatBypassTime(ms: number): string {
+  const totalSec = Math.max(0, Math.ceil(ms / 1000));
+  const m = Math.floor(totalSec / 60);
+  const s = totalSec % 60;
+  const pad = (n: number) => String(n).padStart(2, "0");
+  return `${m}:${pad(s)}`;
+}
+
+async function renderBypasses() {
+  const bypasses: Record<string, number> = await chrome.runtime.sendMessage({ type: "getBypasses" });
+  const now = Date.now();
+  const active = Object.entries(bypasses).filter(([, expiry]) => expiry > now);
+
+  bypassBanners.innerHTML = "";
+
+  if (active.length === 0) {
+    if (bypassInterval) {
+      clearInterval(bypassInterval);
+      bypassInterval = null;
+    }
+    return;
+  }
+
+  for (const [domain, expiry] of active) {
+    const banner = document.createElement("div");
+    banner.className = "flex items-center justify-between py-2 px-3 bg-green-50 border-b border-green-200";
+
+    const label = document.createElement("span");
+    label.className = "text-xs font-medium text-green-700";
+    label.textContent = `${domain} unlocked`;
+
+    const timer = document.createElement("span");
+    timer.className = "text-xs font-mono text-green-700";
+    timer.textContent = formatBypassTime(expiry - now);
+
+    banner.appendChild(label);
+    banner.appendChild(timer);
+    bypassBanners.appendChild(banner);
+  }
+
+  if (!bypassInterval) {
+    bypassInterval = setInterval(renderBypasses, 1000);
+  }
+}
+
 setupList("distraction", "distractionSites");
 setupList("allowed", "allowedDuringFocus");
 init();
+renderBypasses();

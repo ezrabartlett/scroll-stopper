@@ -50,6 +50,7 @@ chrome.webNavigation.onBeforeNavigate.addListener(async (details) => {
   }
 
   if (data.deepFocusEnabled) {
+    bypassMap.clear();
     if (!matchesList(url.hostname, data.allowedDuringFocus)) {
       chrome.tabs.update(details.tabId, {
         url: chrome.runtime.getURL(
@@ -71,7 +72,7 @@ chrome.webNavigation.onBeforeNavigate.addListener(async (details) => {
   }
 });
 
-chrome.runtime.onMessage.addListener((msg, sender) => {
+chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
   if (msg.type === "bypass" && msg.url && sender.tab?.id) {
     try {
       const url = new URL(msg.url);
@@ -80,5 +81,22 @@ chrome.runtime.onMessage.addListener((msg, sender) => {
       // ignore malformed URLs
     }
     chrome.tabs.update(sender.tab.id, { url: msg.url });
+  }
+
+  if (msg.type === "getBypasses") {
+    const now = Date.now();
+    const active: Record<string, number> = {};
+    for (const [domain, expiry] of bypassMap) {
+      if (expiry > now) {
+        active[domain] = expiry;
+      } else {
+        bypassMap.delete(domain);
+      }
+    }
+    sendResponse(active);
+  }
+
+  if (msg.type === "clearBypasses") {
+    bypassMap.clear();
   }
 });
