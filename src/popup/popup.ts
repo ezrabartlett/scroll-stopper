@@ -11,6 +11,7 @@ interface ListElements {
   input: HTMLInputElement;
   confirm: HTMLButtonElement;
   cancel: HTMLButtonElement;
+  error: HTMLParagraphElement;
 }
 
 function getListElements(prefix: string): ListElements {
@@ -22,6 +23,7 @@ function getListElements(prefix: string): ListElements {
     input: document.getElementById(`${prefix}-input`) as HTMLInputElement,
     confirm: document.getElementById(`${prefix}-confirm`) as HTMLButtonElement,
     cancel: document.getElementById(`${prefix}-cancel`) as HTMLButtonElement,
+    error: document.getElementById(`${prefix}-error`) as HTMLParagraphElement,
   };
 }
 
@@ -69,11 +71,24 @@ function setupList(prefix: string, storageKey: ListKey) {
   function hideAddRow() {
     els.addRow.classList.add("hidden");
     els.addBtn.classList.remove("hidden");
+    els.error.classList.add("hidden");
+  }
+
+  function isValidDomain(value: string): boolean {
+    return /^[a-z0-9]([a-z0-9-]*[a-z0-9])?(\.[a-z0-9]([a-z0-9-]*[a-z0-9])?)+$/.test(value);
   }
 
   async function addDomain() {
     const cleaned = els.input.value.trim().toLowerCase();
     if (!cleaned) return;
+
+    if (!isValidDomain(cleaned)) {
+      els.error.textContent = "Please enter a valid domain, e.g. reddit.com";
+      els.error.classList.remove("hidden");
+      return;
+    }
+
+    els.error.classList.add("hidden");
 
     const data = await getStorage();
     const list = data[storageKey];
