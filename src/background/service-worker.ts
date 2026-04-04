@@ -1,6 +1,6 @@
 import { getStorage, setStorage } from "../shared/storage";
 
-const BYPASS_DURATION_MS = 20 * 1000;
+const DEFAULT_BYPASS_MINUTES = 10;
 
 // Maps domain -> expiry timestamp
 const bypassMap = new Map<string, number>();
@@ -74,13 +74,17 @@ chrome.webNavigation.onBeforeNavigate.addListener(async (details) => {
 
 chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
   if (msg.type === "bypass" && msg.url && sender.tab?.id) {
-    try {
-      const url = new URL(msg.url);
-      bypassMap.set(url.hostname, Date.now() + BYPASS_DURATION_MS);
-    } catch {
-      // ignore malformed URLs
-    }
-    chrome.tabs.update(sender.tab.id, { url: msg.url });
+    const tabId = sender.tab.id;
+    getStorage().then((data) => {
+      const minutes = data.bypassTimeMinutes ?? DEFAULT_BYPASS_MINUTES;
+      const durationMs = minutes * 60 * 1000;
+      try {
+        const url = new URL(msg.url);
+        bypassMap.set(url.hostname, Date.now() + durationMs);
+      } catch { /* ignore malformed URLs */ }
+      chrome.tabs.update(tabId, { url: msg.url });
+    });
+    return true;
   }
 
   if (msg.type === "getBypasses") {

@@ -122,8 +122,41 @@
     </div>
 
     <div class="flex items-center justify-between py-3 border-b border-gray-200">
-      <span class="text-sm font-medium">Wait time</span>
-      <span class="text-xs text-gray-400">Coming soon</span>
+      <div class="flex items-center gap-1.5">
+        <span class="text-sm font-medium">Distracting site wait time</span>
+        <div class="relative group">
+          <svg class="w-3.5 h-3.5 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" d="m11.25 11.25.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z" />
+          </svg>
+          <div class="absolute left-1/2 -translate-x-1/2 top-full mt-1.5 w-48 px-2.5 py-1.5 bg-gray-800 text-white text-xs rounded shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-opacity pointer-events-none z-10">
+            This is how long you'll have to wait before overriding the block on a distracting site
+          </div>
+        </div>
+      </div>
+      <div class="flex items-center gap-1.5">
+        <input id="wait-time-input" type="number" min="0" value="10"
+          class="w-12 text-center border border-gray-300 rounded px-1 py-0.5 text-xs focus:outline-none focus:ring-1 focus:ring-purple-700">
+        <span class="text-xs text-gray-500">sec</span>
+      </div>
+    </div>
+
+    <div class="flex items-center justify-between py-3 border-b border-gray-200">
+      <div class="flex items-center gap-1.5">
+        <span class="text-sm font-medium">Block bypass time</span>
+        <div class="relative group">
+          <svg class="w-3.5 h-3.5 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" d="m11.25 11.25.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z" />
+          </svg>
+          <div class="absolute left-1/2 -translate-x-1/2 top-full mt-1.5 w-48 px-2.5 py-1.5 bg-gray-800 text-white text-xs rounded shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-opacity pointer-events-none z-10">
+            This is how long you'll be allowed to use an app before it's blocked again
+          </div>
+        </div>
+      </div>
+      <div class="flex items-center gap-1.5">
+        <input id="bypass-time-input" type="number" min="0" value="10"
+          class="w-12 text-center border border-gray-300 rounded px-1 py-0.5 text-xs focus:outline-none focus:ring-1 focus:ring-purple-700">
+        <span class="text-xs text-gray-500">min</span>
+      </div>
     </div>
   </div>
 

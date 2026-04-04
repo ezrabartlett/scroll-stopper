@@ -22,9 +22,10 @@
     <div class="text-5xl mb-6">🤔</div>
     <h1 class="text-2xl font-bold mb-3">Are you sure this is important right now?</h1>
     <p id="blocked-url" class="text-gray-400 text-sm mb-6 break-all"></p>
-    <button id="continue-btn"
-      class="px-6 py-2.5 bg-gray-200 text-gray-700 text-sm font-medium rounded-lg hover:bg-gray-300 transition-colors">
-      Yes, continue to distracting site
+    <button id="continue-btn" disabled
+      class="relative px-6 py-2.5 bg-gray-200 text-sm font-medium rounded-lg overflow-hidden transition-colors disabled:cursor-not-allowed disabled:text-gray-400 text-gray-700">
+      <div id="btn-fill" class="absolute inset-0 bg-gray-300 origin-left transition-none"></div>
+      <span class="relative z-10">Yes, continue to distracting site</span>
     </button>
   </div>
 

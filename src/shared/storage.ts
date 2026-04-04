@@ -3,6 +3,8 @@ export interface StorageData {
   deepFocusEndTime: number | null;
   distractionSites: string[];
   allowedDuringFocus: string[];
+  waitTimeSeconds: number;
+  bypassTimeMinutes: number;
 }
 
 const DEFAULTS: StorageData = {
@@ -10,6 +12,8 @@ const DEFAULTS: StorageData = {
   deepFocusEndTime: null,
   distractionSites: [],
   allowedDuringFocus: [],
+  waitTimeSeconds: 10,
+  bypassTimeMinutes: 10,
 };
 
 export async function getStorage(): Promise<StorageData> {

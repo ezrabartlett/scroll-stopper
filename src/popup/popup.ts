@@ -292,7 +292,32 @@ async function renderBypasses() {
   }
 }
 
+const waitTimeInput = document.getElementById("wait-time-input") as HTMLInputElement;
+
+waitTimeInput.addEventListener("change", async () => {
+  const val = parseInt(waitTimeInput.value, 10);
+  if (!isNaN(val) && val >= 0) {
+    await setStorage({ waitTimeSeconds: val });
+  }
+});
+
+const bypassTimeInput = document.getElementById("bypass-time-input") as HTMLInputElement;
+
+bypassTimeInput.addEventListener("change", async () => {
+  const val = parseInt(bypassTimeInput.value, 10);
+  if (!isNaN(val) && val >= 0) {
+    await setStorage({ bypassTimeMinutes: val });
+  }
+});
+
+async function initSettings() {
+  const data = await getStorage();
+  waitTimeInput.value = String(data.waitTimeSeconds);
+  bypassTimeInput.value = String(data.bypassTimeMinutes);
+}
+
 setupList("distraction", "distractionSites");
 setupList("allowed", "allowedDuringFocus");
 init();
+initSettings();
 renderBypasses();
