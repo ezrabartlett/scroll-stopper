@@ -2,9 +2,6 @@ import { getStorage, setStorage } from "../shared/storage";
 
 const DEFAULT_BYPASS_MINUTES = 10;
 
-// Maps domain -> expiry timestamp
-const bypassMap = new Map<string, number>();
-
 function domainMatches(hostname: string, pattern: string): boolean {
   return hostname === pattern || hostname.endsWith(`.${pattern}`);
 }
@@ -13,21 +10,21 @@ function matchesList(hostname: string, domains: string[]): boolean {
   return domains.some((d) => domainMatches(hostname, d));
 }
 
-function isDomainBypassed(hostname: string): boolean {
-  for (const [domain, expiry] of bypassMap) {
-    if (domainMatches(hostname, domain)) {
-      if (Date.now() < expiry) return true;
-      bypassMap.delete(domain);
-    }
+function isDomainBypassed(hostname: string, bypasses: Record<string, number>): boolean {
+  const now = Date.now();
+  for (const [domain, expiry] of Object.entries(bypasses)) {
+    if (domainMatches(hostname, domain) && expiry > now) return true;
   }
   return false;
 }
 
-function extractMatchingDomain(hostname: string, domains: string[]): string | null {
-  for (const d of domains) {
-    if (domainMatches(hostname, d)) return d;
+function pruneExpired(bypasses: Record<string, number>): Record<string, number> {
+  const now = Date.now();
+  const result: Record<string, number> = {};
+  for (const [domain, expiry] of Object.entries(bypasses)) {
+    if (expiry > now) result[domain] = expiry;
   }
-  return null;
+  return result;
 }
 
 chrome.webNavigation.onBeforeNavigate.addListener(async (details) => {
@@ -50,7 +47,9 @@ chrome.webNavigation.onBeforeNavigate.addListener(async (details) => {
   }
 
   if (data.deepFocusEnabled) {
-    bypassMap.clear();
+    if (Object.keys(data.bypasses).length > 0) {
+      await setStorage({ bypasses: {} });
+    }
     if (!matchesList(url.hostname, data.allowedDuringFocus)) {
       chrome.tabs.update(details.tabId, {
         url: chrome.runtime.getURL(
@@ -62,7 +61,7 @@ chrome.webNavigation.onBeforeNavigate.addListener(async (details) => {
   }
 
   if (matchesList(url.hostname, data.distractionSites)) {
-    if (isDomainBypassed(url.hostname)) return;
+    if (isDomainBypassed(url.hostname, data.bypasses)) return;
 
     chrome.tabs.update(details.tabId, {
       url: chrome.runtime.getURL(
@@ -75,12 +74,14 @@ chrome.webNavigation.onBeforeNavigate.addListener(async (details) => {
 chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
   if (msg.type === "bypass" && msg.url && sender.tab?.id) {
     const tabId = sender.tab.id;
-    getStorage().then((data) => {
+    getStorage().then(async (data) => {
       const minutes = data.bypassTimeMinutes ?? DEFAULT_BYPASS_MINUTES;
       const durationMs = minutes * 60 * 1000;
       try {
         const url = new URL(msg.url);
-        bypassMap.set(url.hostname, Date.now() + durationMs);
+        const bypasses = pruneExpired(data.bypasses);
+        bypasses[url.hostname] = Date.now() + durationMs;
+        await setStorage({ bypasses });
       } catch { /* ignore malformed URLs */ }
       chrome.tabs.update(tabId, { url: msg.url });
     });
@@ -88,23 +89,26 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
   }
 
   if (msg.type === "getBypasses") {
-    const now = Date.now();
-    const active: Record<string, number> = {};
-    for (const [domain, expiry] of bypassMap) {
-      if (expiry > now) {
-        active[domain] = expiry;
-      } else {
-        bypassMap.delete(domain);
+    getStorage().then(async (data) => {
+      const active = pruneExpired(data.bypasses);
+      if (Object.keys(active).length !== Object.keys(data.bypasses).length) {
+        await setStorage({ bypasses: active });
       }
-    }
-    sendResponse(active);
+      sendResponse(active);
+    });
+    return true;
   }
 
   if (msg.type === "clearBypasses") {
-    bypassMap.clear();
+    setStorage({ bypasses: {} });
   }
 
   if (msg.type === "relockDomain" && msg.domain) {
-    bypassMap.delete(msg.domain);
+    getStorage().then(async (data) => {
+      const bypasses = { ...data.bypasses };
+      delete bypasses[msg.domain];
+      await setStorage({ bypasses });
+    });
+    return true;
   }
 });

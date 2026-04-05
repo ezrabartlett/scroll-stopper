@@ -5,6 +5,7 @@ export interface StorageData {
   allowedDuringFocus: string[];
   waitTimeSeconds: number;
   bypassTimeMinutes: number;
+  bypasses: Record<string, number>;
 }
 
 const DEFAULTS: StorageData = {
@@ -14,6 +15,7 @@ const DEFAULTS: StorageData = {
   allowedDuringFocus: [],
   waitTimeSeconds: 10,
   bypassTimeMinutes: 10,
+  bypasses: {},
 };
 
 export async function getStorage(): Promise<StorageData> {
