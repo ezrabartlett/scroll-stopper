@@ -6,13 +6,13 @@
   <link rel="stylesheet" href="styles.css">
   <title>Scroll Stopper</title>
 </head>
-<body class="w-80 bg-gray-50 text-gray-800">
+<body class="w-80 bg-surface text-txt">
   <!-- Main view -->
   <div id="main-view" class="p-5 max-h-[500px] overflow-y-auto">
     <div class="flex items-center justify-between mb-4">
       <div class="w-6"></div>
       <h1 class="text-lg font-semibold text-center">Scroll Stopper</h1>
-      <button id="settings-btn" class="w-6 h-6 text-gray-400 hover:text-gray-600" title="Settings">
+      <button id="settings-btn" class="w-6 h-6 text-txt-muted hover:text-txt-secondary" title="Settings">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.325.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 0 1 1.37.49l1.296 2.247a1.125 1.125 0 0 1-.26 1.431l-1.003.827c-.293.241-.438.613-.43.992a7.723 7.723 0 0 1 0 .255c-.008.378.137.75.43.991l1.004.827c.424.35.534.955.26 1.43l-1.298 2.247a1.125 1.125 0 0 1-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.47 6.47 0 0 1-.22.128c-.331.183-.581.495-.644.869l-.213 1.281c-.09.543-.56.941-1.11.941h-2.594c-.55 0-1.019-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 0 1-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 0 1-1.369-.49l-1.297-2.247a1.125 1.125 0 0 1 .26-1.431l1.004-.827c.292-.24.437-.613.43-.991a6.932 6.932 0 0 1 0-.255c.007-.38-.138-.751-.43-.992l-1.004-.827a1.125 1.125 0 0 1-.26-1.43l1.297-2.247a1.125 1.125 0 0 1 1.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.086.22-.128.332-.183.582-.495.644-.869l.214-1.28Z" />
           <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
@@ -21,46 +21,46 @@
     </div>
 
     <!-- Active session banner -->
-    <div id="focus-banner" class="flex items-center justify-between py-2 px-3 -mx-5 bg-purple-50 border-b border-purple-200 hidden">
-      <span class="text-xs font-medium text-purple-700">Deep focus session active</span>
-      <span id="focus-countdown" class="text-xs font-mono text-purple-700"></span>
+    <div id="focus-banner" class="flex items-center justify-between py-2 px-3 -mx-5 bg-brand-soft border-b border-brand-border hidden">
+      <span class="text-xs font-medium text-brand">Deep focus session active</span>
+      <span id="focus-countdown" class="text-xs font-mono text-brand"></span>
     </div>
 
     <!-- Bypass banners -->
     <div id="bypass-banners" class="-mx-5"></div>
 
     <!-- Deep focus toggle -->
-    <div class="flex items-center justify-between py-3 border-b border-gray-200">
+    <div class="flex items-center justify-between py-3 border-b border-line">
       <div class="flex items-center gap-1.5">
         <span class="text-sm font-medium">Deep focus mode</span>
         <div class="relative group">
-          <svg class="w-3.5 h-3.5 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+          <svg class="w-3.5 h-3.5 text-txt-muted" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" d="m11.25 11.25.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z" />
           </svg>
-          <div class="absolute left-1/2 -translate-x-1/2 top-full mt-1.5 w-48 px-2.5 py-1.5 bg-gray-800 text-white text-xs rounded shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-opacity pointer-events-none z-10">
+          <div class="absolute left-1/2 -translate-x-1/2 top-full mt-1.5 w-48 px-2.5 py-1.5 bg-tooltip text-tooltip-text text-xs rounded shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-opacity pointer-events-none z-10">
             While in deep focus mode, all websites will be blocked except for those which you've explicitly allowed
           </div>
         </div>
       </div>
       <label class="relative inline-flex items-center cursor-pointer">
         <input id="focus-toggle" type="checkbox" class="sr-only peer">
-        <div class="w-9 h-5 bg-gray-300 rounded-full peer peer-checked:bg-purple-700 after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:after:translate-x-full"></div>
+        <div class="w-9 h-5 bg-toggle-off rounded-full peer peer-checked:bg-brand after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:after:translate-x-full"></div>
       </label>
     </div>
 
     <!-- Distraction sites row -->
-    <button id="nav-distraction" class="flex items-center justify-between py-3 hover:bg-gray-100 -mx-5 px-5 w-[calc(100%+2.5rem)]">
+    <button id="nav-distraction" class="flex items-center justify-between py-3 hover:bg-surface-hover -mx-5 px-5 w-[calc(100%+2.5rem)]">
       <span class="text-sm font-medium">Distracting sites</span>
-      <svg class="w-4 h-4 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+      <svg class="w-4 h-4 text-txt-muted" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
         <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
       </svg>
     </button>
-    <div class="border-b border-gray-200"></div>
+    <div class="border-b border-line"></div>
 
     <!-- Allowed during deep focus row -->
-    <button id="nav-allowed" class="flex items-center justify-between py-3 hover:bg-gray-100 -mx-5 px-5 w-[calc(100%+2.5rem)]">
+    <button id="nav-allowed" class="flex items-center justify-between py-3 hover:bg-surface-hover -mx-5 px-5 w-[calc(100%+2.5rem)]">
       <span class="text-sm font-medium">Allowed during deep focus</span>
-      <svg class="w-4 h-4 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+      <svg class="w-4 h-4 text-txt-muted" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
         <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
       </svg>
     </button>
@@ -69,7 +69,7 @@
   <!-- Distraction sites edit view -->
   <div id="distraction-view" class="p-5 max-h-[500px] overflow-y-auto hidden">
     <div class="flex items-center mb-4">
-      <button id="distraction-back-btn" class="w-6 h-6 text-gray-400 hover:text-gray-600" title="Back">
+      <button id="distraction-back-btn" class="w-6 h-6 text-txt-muted hover:text-txt-secondary" title="Back">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
         </svg>
@@ -77,21 +77,21 @@
       <h1 class="text-lg font-semibold ml-2">Distracting Sites</h1>
     </div>
     <ul id="distraction-list" class="space-y-1.5 mb-2"></ul>
-    <p id="distraction-empty" class="text-xs text-gray-400 mb-2 hidden">No sites added.</p>
+    <p id="distraction-empty" class="text-xs text-txt-muted mb-2 hidden">No sites added.</p>
     <div id="distraction-add-row" class="flex gap-2 hidden">
       <input id="distraction-input" type="text" placeholder="e.g. reddit.com"
-        class="flex-1 border border-gray-300 rounded px-2 py-1 text-xs focus:outline-none focus:ring-1 focus:ring-purple-700">
-      <button id="distraction-confirm" class="text-xs text-purple-700 hover:text-purple-900 font-medium">Add</button>
-      <button id="distraction-cancel" class="text-xs text-gray-400 hover:text-gray-600">Cancel</button>
+        class="flex-1 border border-input rounded px-2 py-1 text-xs bg-surface-raised text-txt focus:outline-none focus:ring-1 focus:ring-brand">
+      <button id="distraction-confirm" class="text-xs text-brand hover:text-brand-deep font-medium">Add</button>
+      <button id="distraction-cancel" class="text-xs text-txt-muted hover:text-txt-secondary">Cancel</button>
     </div>
-    <button id="distraction-add-btn" class="text-xs text-purple-700 hover:text-purple-900 font-medium">+ Add</button>
-    <p id="distraction-error" class="text-xs text-red-400 mt-2 hidden"></p>
+    <button id="distraction-add-btn" class="text-xs text-brand hover:text-brand-deep font-medium">+ Add</button>
+    <p id="distraction-error" class="text-xs text-danger mt-2 hidden"></p>
   </div>
 
   <!-- Allowed sites edit view -->
   <div id="allowed-view" class="p-5 max-h-[500px] overflow-y-auto hidden">
     <div class="flex items-center mb-4">
-      <button id="allowed-back-btn" class="w-6 h-6 text-gray-400 hover:text-gray-600" title="Back">
+      <button id="allowed-back-btn" class="w-6 h-6 text-txt-muted hover:text-txt-secondary" title="Back">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
         </svg>
@@ -99,21 +99,21 @@
       <h1 class="text-lg font-semibold ml-2">Allowed During Deep Focus</h1>
     </div>
     <ul id="allowed-list" class="space-y-1.5 mb-2"></ul>
-    <p id="allowed-empty" class="text-xs text-gray-400 mb-2 hidden">No sites added.</p>
+    <p id="allowed-empty" class="text-xs text-txt-muted mb-2 hidden">No sites added.</p>
     <div id="allowed-add-row" class="flex gap-2 hidden">
       <input id="allowed-input" type="text" placeholder="e.g. docs.google.com"
-        class="flex-1 border border-gray-300 rounded px-2 py-1 text-xs focus:outline-none focus:ring-1 focus:ring-purple-700">
-      <button id="allowed-confirm" class="text-xs text-purple-700 hover:text-purple-900 font-medium">Add</button>
-      <button id="allowed-cancel" class="text-xs text-gray-400 hover:text-gray-600">Cancel</button>
+        class="flex-1 border border-input rounded px-2 py-1 text-xs bg-surface-raised text-txt focus:outline-none focus:ring-1 focus:ring-brand">
+      <button id="allowed-confirm" class="text-xs text-brand hover:text-brand-deep font-medium">Add</button>
+      <button id="allowed-cancel" class="text-xs text-txt-muted hover:text-txt-secondary">Cancel</button>
     </div>
-    <button id="allowed-add-btn" class="text-xs text-purple-700 hover:text-purple-900 font-medium">+ Add</button>
-    <p id="allowed-error" class="text-xs text-red-400 mt-2 hidden"></p>
+    <button id="allowed-add-btn" class="text-xs text-brand hover:text-brand-deep font-medium">+ Add</button>
+    <p id="allowed-error" class="text-xs text-danger mt-2 hidden"></p>
   </div>
 
   <!-- Settings view -->
   <div id="settings-view" class="p-5 max-h-[500px] overflow-y-auto hidden">
     <div class="flex items-center mb-4">
-      <button id="back-btn" class="w-6 h-6 text-gray-400 hover:text-gray-600" title="Back">
+      <button id="back-btn" class="w-6 h-6 text-txt-muted hover:text-txt-secondary" title="Back">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
         </svg>
@@ -121,73 +121,82 @@
       <h1 class="text-lg font-semibold ml-2">Settings</h1>
     </div>
 
-    <div class="flex items-center justify-between py-3 border-b border-gray-200">
+    <!-- Dark mode toggle -->
+    <div class="flex items-center justify-between py-3 border-b border-line">
+      <span class="text-sm font-medium">Dark mode</span>
+      <label class="relative inline-flex items-center cursor-pointer">
+        <input id="dark-mode-toggle" type="checkbox" class="sr-only peer">
+        <div class="w-9 h-5 bg-toggle-off rounded-full peer peer-checked:bg-brand after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:after:translate-x-full"></div>
+      </label>
+    </div>
+
+    <div class="flex items-center justify-between py-3 border-b border-line">
       <div class="flex items-center gap-1.5">
         <span class="text-sm font-medium">Distracting site wait time</span>
         <div class="relative group">
-          <svg class="w-3.5 h-3.5 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+          <svg class="w-3.5 h-3.5 text-txt-muted" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" d="m11.25 11.25.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z" />
           </svg>
-          <div class="absolute left-1/2 -translate-x-1/2 top-full mt-1.5 w-48 px-2.5 py-1.5 bg-gray-800 text-white text-xs rounded shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-opacity pointer-events-none z-10">
+          <div class="absolute left-1/2 -translate-x-1/2 top-full mt-1.5 w-48 px-2.5 py-1.5 bg-tooltip text-tooltip-text text-xs rounded shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-opacity pointer-events-none z-10">
             This is how long you'll have to wait before overriding the block on a distracting site
           </div>
         </div>
       </div>
       <div class="flex items-center gap-1.5">
         <input id="wait-time-input" type="number" min="0" value="10"
-          class="w-12 text-center border border-gray-300 rounded px-1 py-0.5 text-xs focus:outline-none focus:ring-1 focus:ring-purple-700">
-        <span class="text-xs text-gray-500">sec</span>
+          class="w-12 text-center border border-input rounded px-1 py-0.5 text-xs bg-surface-raised text-txt focus:outline-none focus:ring-1 focus:ring-brand">
+        <span class="text-xs text-txt-secondary">sec</span>
       </div>
     </div>
 
-    <div class="flex items-center justify-between py-3 border-b border-gray-200">
+    <div class="flex items-center justify-between py-3 border-b border-line">
       <div class="flex items-center gap-1.5">
         <span class="text-sm font-medium">Block bypass time</span>
         <div class="relative group">
-          <svg class="w-3.5 h-3.5 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+          <svg class="w-3.5 h-3.5 text-txt-muted" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" d="m11.25 11.25.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z" />
           </svg>
-          <div class="absolute left-1/2 -translate-x-1/2 top-full mt-1.5 w-48 px-2.5 py-1.5 bg-gray-800 text-white text-xs rounded shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-opacity pointer-events-none z-10">
+          <div class="absolute left-1/2 -translate-x-1/2 top-full mt-1.5 w-48 px-2.5 py-1.5 bg-tooltip text-tooltip-text text-xs rounded shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-opacity pointer-events-none z-10">
             This is how long you'll be allowed to use an app before it's blocked again
           </div>
         </div>
       </div>
       <div class="flex items-center gap-1.5">
         <input id="bypass-time-input" type="number" min="0" value="10"
-          class="w-12 text-center border border-gray-300 rounded px-1 py-0.5 text-xs focus:outline-none focus:ring-1 focus:ring-purple-700">
-        <span class="text-xs text-gray-500">min</span>
+          class="w-12 text-center border border-input rounded px-1 py-0.5 text-xs bg-surface-raised text-txt focus:outline-none focus:ring-1 focus:ring-brand">
+        <span class="text-xs text-txt-secondary">min</span>
       </div>
     </div>
 
     <button id="apply-settings-btn" disabled
-      class="mt-4 w-full py-2 text-sm font-medium rounded-lg transition-colors bg-purple-700 text-white disabled:bg-gray-200 disabled:text-gray-400 disabled:cursor-not-allowed hover:bg-purple-800 disabled:hover:bg-gray-200">
+      class="mt-4 w-full py-2 text-sm font-medium rounded-lg transition-colors bg-brand text-white disabled:bg-disabled disabled:text-disabled-text disabled:cursor-not-allowed hover:bg-brand-hover disabled:hover:bg-disabled">
       Apply
     </button>
   </div>
 
   <!-- Focus duration modal -->
-  <div id="focus-modal" class="fixed inset-0 bg-black/40 flex items-center justify-center hidden">
-    <div class="bg-white rounded shadow-lg p-5 w-64">
+  <div id="focus-modal" class="fixed inset-0 bg-overlay flex items-center justify-center hidden">
+    <div class="bg-surface-raised rounded shadow-lg p-5 w-64">
       <p class="text-sm font-semibold mb-3 text-center">How long would you like to focus?</p>
       <div class="flex items-center justify-center gap-2 mb-4">
         <input id="focus-minutes" type="number" min="1" placeholder="30"
-          class="w-20 text-center border border-gray-300 rounded px-2 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-purple-700">
-        <span class="text-sm text-gray-500">minutes</span>
+          class="w-20 text-center border border-input rounded px-2 py-2 text-sm bg-surface-raised text-txt focus:outline-none focus:ring-1 focus:ring-brand">
+        <span class="text-sm text-txt-secondary">minutes</span>
       </div>
       <div class="flex gap-2">
-        <button id="focus-cancel" class="flex-1 py-2 text-xs font-medium text-gray-500 hover:text-gray-700 rounded border border-gray-300 transition-colors">Cancel</button>
-        <button id="focus-start" class="flex-1 py-2 text-xs font-medium text-white bg-purple-700 hover:bg-purple-900 rounded transition-colors">Start</button>
+        <button id="focus-cancel" class="flex-1 py-2 text-xs font-medium text-txt-secondary hover:text-txt rounded border border-input transition-colors">Cancel</button>
+        <button id="focus-start" class="flex-1 py-2 text-xs font-medium text-white bg-brand hover:bg-brand-deep rounded transition-colors">Start</button>
       </div>
     </div>
   </div>
 
   <!-- End session confirmation modal -->
-  <div id="end-modal" class="fixed inset-0 bg-black/40 flex items-center justify-center hidden">
-    <div class="bg-white rounded shadow-lg p-5 w-64">
+  <div id="end-modal" class="fixed inset-0 bg-overlay flex items-center justify-center hidden">
+    <div class="bg-surface-raised rounded shadow-lg p-5 w-64">
       <p class="text-sm font-semibold mb-4 text-center">Are you sure you want to end your focus session early?</p>
       <div class="flex gap-2">
-        <button id="end-cancel" class="flex-1 py-2 text-xs font-medium text-gray-500 hover:text-gray-700 rounded border border-gray-300 transition-colors">Cancel</button>
-        <button id="end-confirm" class="flex-1 py-2 text-xs font-medium text-white bg-red-400 hover:bg-red-500 rounded transition-colors">End session</button>
+        <button id="end-cancel" class="flex-1 py-2 text-xs font-medium text-txt-secondary hover:text-txt rounded border border-input transition-colors">Cancel</button>
+        <button id="end-confirm" class="flex-1 py-2 text-xs font-medium text-white bg-danger hover:bg-danger-hover rounded transition-colors">End session</button>
       </div>
     </div>
   </div>

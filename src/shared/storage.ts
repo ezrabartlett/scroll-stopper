@@ -6,6 +6,7 @@ export interface StorageData {
   waitTimeSeconds: number;
   bypassTimeMinutes: number;
   bypasses: Record<string, number>;
+  darkModeEnabled: boolean;
 }
 
 const DEFAULTS: StorageData = {
@@ -16,6 +17,7 @@ const DEFAULTS: StorageData = {
   waitTimeSeconds: 10,
   bypassTimeMinutes: 10,
   bypasses: {},
+  darkModeEnabled: true,
 };
 
 export async function getStorage(): Promise<StorageData> {

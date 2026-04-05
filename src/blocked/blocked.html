@@ -6,13 +6,13 @@
   <link rel="stylesheet" href="styles.css">
   <title>Blocked - Scroll Stopper</title>
 </head>
-<body class="min-h-screen bg-gray-50 flex items-center justify-center text-gray-800">
+<body class="min-h-screen bg-surface flex items-center justify-center text-txt">
 
   <!-- Deep focus block -->
   <div id="deep-focus-view" class="text-center px-6 hidden">
     <div class="text-5xl mb-6">🔒</div>
     <h1 class="text-2xl font-bold mb-3">Deep Focus Active</h1>
-    <p class="text-gray-500 max-w-sm">
+    <p class="text-txt-secondary max-w-sm">
       This site is blocked while deep focus mode is on. Turn it off from the Scroll Stopper extension to continue.
     </p>
   </div>
@@ -21,10 +21,10 @@
   <div id="distraction-view" class="text-center px-6 hidden">
     <div class="text-5xl mb-6">🤔</div>
     <h1 class="text-2xl font-bold mb-3">Are you sure this is important right now?</h1>
-    <p id="blocked-url" class="text-gray-400 text-sm mb-6 break-all"></p>
+    <p id="blocked-url" class="text-txt-muted text-sm mb-6 break-all"></p>
     <button id="continue-btn" disabled
-      class="relative px-6 py-2.5 bg-gray-200 text-sm font-medium rounded-lg overflow-hidden transition-colors disabled:cursor-not-allowed disabled:text-gray-400 text-gray-700">
-      <div id="btn-fill" class="absolute inset-0 bg-gray-300 origin-left transition-none"></div>
+      class="relative px-6 py-2.5 bg-btn-neutral text-sm font-medium rounded-lg overflow-hidden transition-colors disabled:cursor-not-allowed disabled:text-disabled-text text-btn-neutral-text">
+      <div id="btn-fill" class="absolute inset-0 bg-btn-neutral-fill origin-left transition-none"></div>
       <span class="relative z-10">Yes, continue to distracting site</span>
     </button>
   </div>

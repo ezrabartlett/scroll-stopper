@@ -1,6 +1,10 @@
 import "../styles/input.css";
 import { getStorage, setStorage, StorageData } from "../shared/storage";
 
+getStorage().then((data) => {
+  document.documentElement.classList.toggle("dark", data.darkModeEnabled);
+});
+
 type ListKey = "distractionSites" | "allowedDuringFocus";
 
 const params = new URLSearchParams(window.location.search);
@@ -34,14 +38,14 @@ async function render() {
   for (const domain of domains) {
     const li = document.createElement("li");
     li.className =
-      "flex items-center justify-between bg-white border border-gray-200 rounded-lg px-4 py-2.5";
+      "flex items-center justify-between bg-surface-raised border border-line rounded-lg px-4 py-2.5";
 
     const span = document.createElement("span");
     span.className = "text-sm";
     span.textContent = domain;
 
     const removeBtn = document.createElement("button");
-    removeBtn.className = "text-xs text-red-400 hover:text-red-600 font-medium";
+    removeBtn.className = "text-xs text-danger hover:text-danger-strong font-medium";
     removeBtn.textContent = "Remove";
     removeBtn.addEventListener("click", () => removeDomain(domain));
 

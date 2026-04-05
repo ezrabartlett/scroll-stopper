@@ -6,28 +6,28 @@
   <link rel="stylesheet" href="styles.css">
   <title>Edit List - Scroll Stopper</title>
 </head>
-<body class="min-h-screen bg-gray-50 text-gray-800">
+<body class="min-h-screen bg-surface text-txt">
   <div class="max-w-lg mx-auto p-6 mt-10">
     <h1 id="page-title" class="text-xl font-semibold mb-6"></h1>
 
     <ul id="domain-list" class="space-y-2 mb-6"></ul>
 
-    <p id="empty-msg" class="text-sm text-gray-400 mb-6 hidden">No domains added yet.</p>
+    <p id="empty-msg" class="text-sm text-txt-muted mb-6 hidden">No domains added yet.</p>
 
-    <button id="add-btn" class="w-full py-2 px-4 bg-blue-500 text-white text-sm font-medium rounded-lg hover:bg-blue-600 transition-colors">
+    <button id="add-btn" class="w-full py-2 px-4 bg-brand text-white text-sm font-medium rounded-lg hover:bg-brand-hover transition-colors">
       + Add domain
     </button>
   </div>
 
   <!-- Modal -->
-  <div id="modal" class="fixed inset-0 bg-black/40 flex items-center justify-center hidden">
-    <div class="bg-white rounded-xl shadow-lg p-6 w-80">
+  <div id="modal" class="fixed inset-0 bg-overlay flex items-center justify-center hidden">
+    <div class="bg-surface-raised rounded-xl shadow-lg p-6 w-80">
       <h2 class="text-sm font-semibold mb-3">Add a domain</h2>
       <input id="domain-input" type="text" placeholder="e.g. reddit.com"
-        class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 mb-4">
+        class="w-full border border-input rounded-lg px-3 py-2 text-sm bg-surface-raised text-txt focus:outline-none focus:ring-2 focus:ring-brand mb-4">
       <div class="flex justify-end gap-2">
-        <button id="modal-cancel" class="px-4 py-1.5 text-sm text-gray-600 hover:text-gray-800">Cancel</button>
-        <button id="modal-confirm" class="px-4 py-1.5 text-sm bg-blue-500 text-white rounded-lg hover:bg-blue-600">Add</button>
+        <button id="modal-cancel" class="px-4 py-1.5 text-sm text-txt-secondary hover:text-txt">Cancel</button>
+        <button id="modal-confirm" class="px-4 py-1.5 text-sm bg-brand text-white rounded-lg hover:bg-brand-hover">Add</button>
       </div>
     </div>
   </div>

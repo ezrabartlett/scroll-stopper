@@ -39,14 +39,14 @@ function setupList(prefix: string, storageKey: ListKey) {
 
     for (const domain of domains) {
       const li = document.createElement("li");
-      li.className = "flex items-center justify-between bg-white border border-gray-200 rounded px-3 py-1.5";
+      li.className = "flex items-center justify-between bg-surface-raised border border-line rounded px-3 py-1.5";
 
       const span = document.createElement("span");
       span.className = "text-xs";
       span.textContent = domain;
 
       const removeBtn = document.createElement("button");
-      removeBtn.className = "text-xs text-red-400 hover:text-red-600 font-medium ml-2";
+      removeBtn.className = "text-xs text-danger hover:text-danger-strong font-medium ml-2";
       removeBtn.textContent = "×";
       removeBtn.addEventListener("click", async () => {
         const data = await getStorage();
@@ -207,6 +207,10 @@ focusCancel.addEventListener("click", () => {
 
 async function init() {
   const data = await getStorage();
+
+  document.documentElement.classList.toggle("dark", data.darkModeEnabled);
+  darkModeToggle.checked = data.darkModeEnabled;
+
   focusToggle.checked = data.deepFocusEnabled;
   if (data.deepFocusEnabled && data.deepFocusEndTime) {
     if (Date.now() >= data.deepFocusEndTime) {
@@ -278,21 +282,21 @@ async function renderBypasses() {
 
   for (const [domain, expiry] of active) {
     const banner = document.createElement("div");
-    banner.className = "flex items-center justify-between py-2 px-3 bg-green-50 border-b border-green-200";
+    banner.className = "flex items-center justify-between py-2 px-3 bg-success-soft border-b border-success-border";
 
     const label = document.createElement("span");
-    label.className = "text-xs font-medium text-green-700";
+    label.className = "text-xs font-medium text-success";
     label.textContent = `${domain} unlocked`;
 
     const right = document.createElement("div");
     right.className = "flex items-center gap-2";
 
     const timer = document.createElement("span");
-    timer.className = "text-xs font-mono text-green-700";
+    timer.className = "text-xs font-mono text-success";
     timer.textContent = formatBypassTime(expiry - now);
 
     const lockBtn = document.createElement("button");
-    lockBtn.className = "text-xs font-medium text-green-700 bg-green-100 hover:bg-green-200 px-2 py-0.5 rounded transition-colors";
+    lockBtn.className = "text-xs font-medium text-success bg-success-subtle hover:bg-success-hover px-2 py-0.5 rounded transition-colors";
     lockBtn.textContent = "Relock";
     lockBtn.addEventListener("click", async () => {
       await chrome.runtime.sendMessage({ type: "relockDomain", domain });
@@ -311,9 +315,16 @@ async function renderBypasses() {
   }
 }
 
+const darkModeToggle = document.getElementById("dark-mode-toggle") as HTMLInputElement;
 const waitTimeInput = document.getElementById("wait-time-input") as HTMLInputElement;
 const bypassTimeInput = document.getElementById("bypass-time-input") as HTMLInputElement;
 const applySettingsBtn = document.getElementById("apply-settings-btn") as HTMLButtonElement;
+
+darkModeToggle.addEventListener("change", async () => {
+  const enabled = darkModeToggle.checked;
+  document.documentElement.classList.toggle("dark", enabled);
+  await setStorage({ darkModeEnabled: enabled });
+});
 
 let savedWaitTime = 10;
 let savedBypassTime = 10;
@@ -345,6 +356,7 @@ async function loadSettingsFromStorage() {
   waitTimeInput.value = String(savedWaitTime);
   bypassTimeInput.value = String(savedBypassTime);
   applySettingsBtn.disabled = true;
+  darkModeToggle.checked = data.darkModeEnabled;
 }
 
 setupList("distraction", "distractionSites");

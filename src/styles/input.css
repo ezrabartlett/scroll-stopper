@@ -1,3 +1,91 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  :root {
+    /* Brand – primary accent */
+    --color-brand: #7c3aed;
+    --color-brand-hover: #6b21a8;
+    --color-brand-deep: #581c87;
+    --color-brand-soft: #faf5ff;
+    --color-brand-border: #e9d5ff;
+
+    /* Success – bypass/unlock banners */
+    --color-success: #15803d;
+    --color-success-soft: #f0fdf4;
+    --color-success-subtle: #dcfce7;
+    --color-success-hover: #bbf7d0;
+    --color-success-border: #bbf7d0;
+
+    /* Danger – errors, remove buttons, end session */
+    --color-danger: #f87171;
+    --color-danger-hover: #ef4444;
+    --color-danger-strong: #dc2626;
+
+    /* Surfaces */
+    --color-surface: #f9fafb;
+    --color-surface-raised: #ffffff;
+    --color-surface-hover: #f3f4f6;
+
+    /* Text */
+    --color-text: #1f2937;
+    --color-text-secondary: #6b7280;
+    --color-text-muted: #9ca3af;
+
+    /* Borders */
+    --color-border: #e5e7eb;
+    --color-input-border: #d1d5db;
+
+    /* Controls */
+    --color-toggle-off: #d1d5db;
+    --color-disabled-bg: #e5e7eb;
+    --color-disabled-text: #9ca3af;
+
+    /* Tooltips */
+    --color-tooltip-bg: #1f2937;
+    --color-tooltip-text: #ffffff;
+
+    /* Neutral buttons (blocked page) */
+    --color-btn-neutral: #e5e7eb;
+    --color-btn-neutral-fill: #d1d5db;
+    --color-btn-neutral-text: #374151;
+
+    /* Modal overlay */
+    --color-overlay: rgba(0, 0, 0, 0.4);
+  }
+
+  .dark {
+    --color-brand-soft: #2e1065;
+    --color-brand-border: #581c87;
+
+    --color-success-soft: #052e16;
+    --color-success-subtle: #14532d;
+    --color-success-hover: #166534;
+    --color-success-border: #14532d;
+
+    --color-surface: #111827;
+    --color-surface-raised: #1f2937;
+    --color-surface-hover: #374151;
+
+    --color-text: #f3f4f6;
+    --color-text-secondary: #9ca3af;
+    --color-text-muted: #6b7280;
+
+    --color-border: #374151;
+    --color-input-border: #4b5563;
+
+    --color-toggle-off: #4b5563;
+    --color-disabled-bg: #374151;
+    --color-disabled-text: #6b7280;
+
+    --color-tooltip-bg: #e5e7eb;
+    --color-tooltip-text: #1f2937;
+
+    --color-btn-neutral: #374151;
+    --color-btn-neutral-fill: #4b5563;
+    --color-btn-neutral-text: #d1d5db;
+
+    --color-overlay: rgba(0, 0, 0, 0.6);
+  }
+}

@@ -1,6 +1,10 @@
 import "../styles/input.css";
 import { getStorage } from "../shared/storage";
 
+getStorage().then((data) => {
+  document.documentElement.classList.toggle("dark", data.darkModeEnabled);
+});
+
 const params = new URLSearchParams(window.location.search);
 const reason = params.get("reason");
 const originalUrl = params.get("url") || "";
@@ -41,7 +45,7 @@ if (reason === "deep_focus") {
       } else {
         btnFill.style.transform = "scaleX(0)";
         continueBtn.disabled = false;
-        continueBtn.classList.add("hover:bg-gray-300", "cursor-pointer");
+        continueBtn.classList.add("hover:bg-surface-hover", "cursor-pointer");
       }
     }
 
