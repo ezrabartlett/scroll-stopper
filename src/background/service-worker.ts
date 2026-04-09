@@ -27,12 +27,12 @@ function pruneExpired(bypasses: Record<string, number>): Record<string, number> 
   return result;
 }
 
-chrome.webNavigation.onBeforeNavigate.addListener(async (details) => {
-  if (details.frameId !== 0) return;
+chrome.tabs.onUpdated.addListener(async (tabId, changeInfo) => {
+  if (!changeInfo.url) return;
 
   let url: URL;
   try {
-    url = new URL(details.url);
+    url = new URL(changeInfo.url);
   } catch {
     return;
   }
@@ -51,9 +51,9 @@ chrome.webNavigation.onBeforeNavigate.addListener(async (details) => {
       await setStorage({ bypasses: {} });
     }
     if (!matchesList(url.hostname, data.allowedDuringFocus)) {
-      chrome.tabs.update(details.tabId, {
+      chrome.tabs.update(tabId, {
         url: chrome.runtime.getURL(
-          `blocked.html?reason=deep_focus&url=${encodeURIComponent(details.url)}`
+          `blocked.html?reason=deep_focus&url=${encodeURIComponent(changeInfo.url)}`
         ),
       });
     }
@@ -63,9 +63,9 @@ chrome.webNavigation.onBeforeNavigate.addListener(async (details) => {
   if (matchesList(url.hostname, data.distractionSites)) {
     if (isDomainBypassed(url.hostname, data.bypasses)) return;
 
-    chrome.tabs.update(details.tabId, {
+    chrome.tabs.update(tabId, {
       url: chrome.runtime.getURL(
-        `blocked.html?reason=distraction&url=${encodeURIComponent(details.url)}`
+        `blocked.html?reason=distraction&url=${encodeURIComponent(changeInfo.url)}`
       ),
     });
   }

@@ -3,9 +3,13 @@
   "description": "Block distracting sites and enforce deep focus mode",
   "version": "1.0",
   "manifest_version": 3,
-  "permissions": ["storage", "webNavigation", "tabs"],
+  "permissions": ["storage", "tabs"],
+  "icons": {
+    "128": "icon.png"
+  },
   "action": {
-    "default_popup": "popup.html"
+    "default_popup": "popup.html",
+    "default_icon": "icon.png"
   },
   "background": {
     "service_worker": "service-worker.js"
